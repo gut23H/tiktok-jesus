@@ -1,0 +1,977 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>TikTok Cristão ✝️</title>
+<style>
+:root {
+  --accent: #ff0050;
+  --accent2: #00f2ea;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background: #000;
+  color: #fff;
+}
+
+/* Feed */
+.feed {
+  height: 100vh;
+  overflow-y: scroll;
+  scroll-snap-type: y mandatory;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Cards */
+.card {
+  position: relative;
+  height: 100vh;
+  scroll-snap-align: start;
+  overflow: hidden;
+}
+
+/* Vídeo */
+video {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* Mostra o vídeo inteiro */
+  background: #000; /* Bordas pretas onde faltar espaço */
+  display: block;
+  margin: 0 auto;
+}
+
+/* Overlay inferior (descrição / botões) */
+.overlay {
+  position: absolute;
+  bottom: 10%;
+  left: 5%;
+  right: 5%;
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  pointer-events: none;
+}
+
+.info {
+  pointer-events: auto;
+  color: #fff;
+  font-size: 16px;
+  line-height: 1.4;
+  background: rgba(0,0,0,0.3);
+  padding: 10px;
+  border-radius: 8px;
+  max-width: 70%;
+  word-wrap: break-word;
+}
+
+.actions {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+.btn {
+  background: var(--accent);
+  border: none;
+  color: white;
+  font-size: 24px;
+  padding: 12px;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: 0.3s;
+  margin-bottom: 40px;
+}
+
+.btn:hover { background: var(--accent2); transform: scale(1.1); }
+.btn.liked { background: var(--accent2); }
+
+.download {
+  display: inline-block;
+  background: rgba(0,0,0,0.5);
+  color: var(--accent2);
+  padding: 5px 10px;
+  border-radius: 6px;
+  text-decoration: none;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.description { margin-bottom: 5px; font-size: 14px; }
+
+/* Botão PLAY central grande (visível antes do primeiro play) */
+#big-play {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  background: rgba(0,0,0,0.6);
+}
+
+#big-play button {
+  background: rgba(255,255,255,0.06);
+  border: 3px solid rgba(255,255,255,0.12);
+  color: #fff;
+  font-size: 32px;
+  padding: 28px 36px;
+  border-radius: 12px;
+  cursor: pointer;
+  backdrop-filter: blur(4px);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+#big-play button:hover {
+  transform: scale(1.03);
+}
+
+/* Ícone triangular do play */
+.play-triangle {
+  width: 0;
+  height: 0;
+  border-left: 18px solid white;
+  border-top: 12px solid transparent;
+  border-bottom: 12px solid transparent;
+}
+
+/* Pequenas melhorias mobile */
+@media (max-width: 600px) {
+  .info { font-size: 14px; max-width: 65%; padding: 8px; }
+  #big-play button { font-size: 22px; padding: 18px 24px; }
+}
+/* Barra de pesquisa estilo TikTok */
+/* Barra de pesquisa compacta */
+.search-bar {
+  position: fixed;
+  top: 10px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 85%;
+  max-width: 300px;
+  z-index: 1000;
+  display: flex;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.5);
+  border-radius: 30px;
+  padding: 6px 12px;
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+}
+
+.search-bar input {
+  width: 100%;
+  background: rgba(255, 255, 255, 0.1);
+  border: none;
+  color: white;
+  font-size: 14px;
+  border-radius: 20px;
+  padding: 6px 10px;
+  outline: none;
+}
+
+.search-bar input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+}
+
+.search-bar input:focus {
+  background: rgba(255, 255, 255, 0.2);
+}
+
+/* Mensagem de nenhum resultado */
+#noResults {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 16px;
+  background: rgba(0, 0, 0, 0.7);
+  padding: 16px 22px;
+  border-radius: 10px;
+  z-index: 999;
+  display: none;
+  text-align: center;
+}
+
+#noResults button {
+  margin-top: 10px;
+  background: #00f2ea;
+  color: #000;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+#noResults button:hover {
+  background: #fff;
+}
+
+
+
+
+
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background: #111;
+  border-top: 2px solid #00f2ea;
+  display: flex;
+  justify-content: space-around;
+  padding: 10px 0;
+  z-index: 999;
+}
+
+.bottom-bar a {
+  color: white;
+  text-align: center;
+  font-size: 13px;
+  text-decoration: none;
+  font-family: Arial;
+}
+
+.bottom-bar i {
+  font-size: 20px;
+  display: block;
+  margin-bottom: 3px;
+}
+
+.bottom-bar a:hover {
+  color: #00f2ea;
+}
+
+.creator-tag-top {
+    position: fixed;
+    top: 65px;
+    left: 12px;
+    background: rgba(0,0,0,0.55);
+    padding: 8px 16px;
+    border-radius: 30px;
+    backdrop-filter: blur(6px);
+    font-size: 16px;
+    font-weight: bold;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    z-index: 9999;
+    border: 1px solid rgba(255,255,255,0.2);
+    text-decoration: none;
+}
+.creator-tag-top img {
+    width: 20px;
+}
+
+
+</style>
+
+</head>
+<header style="
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    background: linear-gradient(45deg, #69C9D0, #EE1D52);
+    color: white;
+    padding: 30px 0;
+    text-align: center;
+    font-size: 20px;
+    font-weight: bold;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+    z-index: 1000;
+">
+</header>
+<body>
+<!-- BOTÃO CLICÁVEL -->
+<a class="creator-tag-top" href="https://www.instagram.com/_gustavo.silva26?igsh=emJ0Nzh3eXFybnNj" target="_blank">
+    <img src="https://cdn-icons-png.flaticon.com/512/174/174855.png">
+    @_GUSTAVO.SILVA26
+</a>
+
+<!-- Barra de pesquisa -->
+<div class="search-bar">
+  <input type="text" id="searchInput" placeholder="Pesquisar... 🔍">
+</div>
+
+
+<!-- Mensagem de nenhum resultado -->
+<div id="noResults" style="display:none;">
+  <p>Nenhum vídeo encontrado 😢</p>
+  <button id="backButton">Voltar ao vídeo</button>
+</div>
+
+<!-- Botão PLAY central (visível ao entrar) -->
+<div id="big-play" aria-hidden="false">
+  <button id="start-btn" aria-label="Tocar vídeos">
+    <span class="play-triangle" aria-hidden="true"></span>
+    <span>Tocar vídeos</span>
+  </button>
+</div>
+
+<main class="feed">
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v1.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description"> #Jesus #Fé</div>
+        <a href="videos/v1.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v2.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description"> #Cristão #Esperança</div>
+        <a href="videos/v2.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v19.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">#jesuscristo #jesus #evangelho #versiculosbiblicos #deus</div>
+        <a href="videos/v19.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+    <div class="card">
+    <video src="videos/v4.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">Palavra de fé #JesusVive</div>
+        <a href="videos/v4.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+  <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v20.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💌 #efesios #salmos #biblia</div>
+        <a href="videos/v20.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v6.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">Me perdoa deus por todos os meus pecados po tudo que errei até hoje,Me desculpa por todas as vezes que falei que iria mudar e não mudei.</div>
+        <a href="videos/v6.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v7.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">Jesus veio para trazer luz ao mundo e oferecer vida eterna através da fé. É uma mensagem sobre amor, escolha entre luz e trevas, e a importância de crer para evitar julgamento.</div>
+        <a href="videos/v7.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v9.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">"não temas, porque eu sou contigo"
+#cristao #edit #cristo #deus #edits✝️</div>
+        <a href="videos/v9.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v12.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">O mundo já está perdido//Isaías 55: 6-9 procurem a ajuda de Deus enquanto podem achá-lo.. amém?#jesus #deus #edit #foryoupage #fyp🕊️</div>
+        <a href="videos/v12.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v16.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">Confie sempre em Deus e abram o coração para Deus meu povo❤️‍🔥
+#Deus #evangelho #jesus #salmos #cristao #versiculosbiblicos</div>
+        <a href="videos/v16.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v18.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">#love #fy</div>
+        <a href="videos/v18.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v3.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">Amor</div>
+        <a href="videos/v3.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/21.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">Amém 🙌🏼✝️ #frasesreflexao #frasesreflexivas #reflexaododia #moises #moisesylos10mandamientos #exodo #versiculosbiblicos-</div>
+        <a href="videos/v21.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v22.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">#frasesreflexao #reflexaododia #reflexao #reflexion #reflexaodevida #jesuscristo #biblia #versiculosbiblicos🌼</div>
+        <a href="videos/v22.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!--TEM VIDEO PERMITIDO 25 MB-->
+  <div class="card">
+    <video src="videos/v23.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">Levítico 18: 22-23 🙏🙌❤️
+#palavradeDeus palavradeDeus #bibliasagrada #versiculos #versiculosbiblicos #lendoabiblia #deusefiel #biblia #Jesus #versiculosdiario #versiculossagrados #versiculosdodia #versiculosdanoite #fycristao</div>
+        <a href="videos/v23.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+  <!--TEM VIDEO PERMITIDO 25 MB-->
+    <div class="card">
+    <video src="videos/v25.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">autocontrole #Deus #Jesus #bibliasagradada #palavradedeus #versiculosbiblicos #cristaosnotiktok #cristianoronaldo #messi #futebol #fypシ #fypシ゚viral</div>
+        <a href="videos/v25.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+    <div class="card">
+    <video src="videos/v30.mp4" loop playsinline></video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v30.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+    <div class="card">
+    <video src="videos/v33.mp4" loop playsinline> #viral  #fyp  #fyyyyyyyyyyyyyyyyyyy  </video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v33.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+<!-- card 35-->
+
+   <div class="card">
+    <video src="videos/v35.mp4" loop playsinline>Oração do Pai Nosso. #jesus #jesusteama #jesuscristo #cristo #cristoteama
+</video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v35.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+<!-- card 36-->
+
+   <div class="card">
+    <video src="videos/v36.mp4" loop playsinline>Quem crê diz? #jesuscristo #deus #livramento #milagre #edit
+</video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v36.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+  <!--TEM VIDEO PERMITIDO 25 MB-->
+<!-- card 37-->
+
+   <div class="card">
+    <video src="videos/v37.mp4" loop playsinline>Só Jesus já basta | | ☝️✝️ #fyp @Andreza 🩷 #jesus #jesuslovesyou #christ #god #trend #foryou #trending
+</video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v37.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+<!-- card 40-->
+
+   <div class="card">
+    <video src="videos/v40.mp4" loop playsinline>Só segue se essa mensagem te alcançou de verdade. 📖 . . . . #DeusNoComando #Fé #Gratidão #PalavraDoDia #Cristão MensagemDeDeus DeusFala Reflexão VersículoDoDia ConfiaEmDeus DeusCuida DeusÉFiel
+</video>
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v40.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+
+
+
+  <!--TEM VIDEO PERMITIDO 25 MB-->
+<!-- card 42-->
+
+   <div class="card">
+    <video src="videos/v42.mp4" loop playsinline>"Deus estará com você a qualquer lugar aonde você for" ❤️‍🔥🌹🙏 #sentimentos #amor #cartas #fe #palavradedeus #jesus #reflexao #motivacao #fyp #foryoupage #fy 🌹❤️‍🔥🙏
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v42.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+
+
+  <!--TEM VIDEO PERMITIDO 25 MB-->
+<!-- card 43-->
+
+   <div class="card">
+    <video src="videos/v43.mp4" loop playsinline> #jesus #biblia #bibliasagrada #jesuscristo #deus #sabedoria #oracao #versiculo #motivacao #cristao #fy #warriorzq
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v43.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+
+    <!--TEM VIDEO PERMITIDO 25 MB-->
+<!-- card 44-->
+
+   <div class="card">
+    <video src="videos/v44.mp4" loop playsinline>Parte 24 | Desenhos Bíblicos. . . #Deus #jesus #biblia #cristao #historiasbiblicas #cristaosnotiktok #reflexão #cristaosnotiktok
+    <div class="overlay">
+      <div class="info">
+        <div class="description">💖
+</div>
+        <a href="videos/v44.mp4" class="download" download>⬇️ Baixar</a>
+      </div>
+      <div class="actions"><button class="btn">❤️</button></div>
+    </div>
+  </div>
+
+
+
+</main>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<div class="bottom-bar">
+  <a href="musicas.html">
+    <i class="fa-solid fa-music"></i>
+    Música
+</a>
+
+  <a href="biblia.pdf" download>
+    <i class="fa-solid fa-book-bible"></i>
+    Bíblia
+</a>
+ <a href="enviarvideo.html">
+    <i class="fa-solid fa-download"></i>
+    Publicar Vídeo
+</a>
+
+  <a href="desenhos.html">
+    <i class="fa-solid fa-film"></i>
+    Desenhos
+  </a>
+    <a href="aula.html">
+    <i class="fa-solid fa-film"></i>
+    Quem e Jesus Cristo ?
+  </a>
+</div>
+<script>
+
+// ---------- EMBARALHAR ORDEM DOS VÍDEOS ----------
+const feed = document.querySelector('.feed');
+const cards = Array.from(feed.children);
+
+// Embaralha aleatoriamente as cards
+cards.sort(() => Math.random() - 0.5);
+
+// Reanexa as cards embaralhadas ao feed
+cards.forEach(card => feed.appendChild(card));
+
+// ---------- Likes (mantive igual) ----------
+const buttons = document.querySelectorAll('.btn');
+buttons.forEach((btn, i) => {
+  const key = `like_${i}`;
+  if (localStorage.getItem(key) === 'true') btn.classList.add('liked');
+  btn.addEventListener('click', () => {
+    btn.classList.toggle('liked');
+    localStorage.setItem(key, btn.classList.contains('liked'));
+  });
+});
+
+// ---------- Configurações dos vídeos ----------
+const videos = Array.from(document.querySelectorAll('video'));
+let userStarted = false;
+let lastPlaying = null;
+
+videos.forEach(v => {
+  try { v.pause(); } catch (e) { }
+});
+
+// Função que encontra o vídeo central
+function getCentralVideo() {
+  const center = window.innerHeight / 2;
+  let closest = null;
+  let minDist = Infinity;
+  videos.forEach(v => {
+    const rect = v.getBoundingClientRect();
+    const videoCenter = rect.top + rect.height / 2;
+    const dist = Math.abs(center - videoCenter);
+    if (dist < minDist) {
+      minDist = dist;
+      closest = v;
+    }
+  });
+  return closest;
+}
+
+// Função que toca apenas o vídeo central
+function playCentralVideo() {
+  const closest = getCentralVideo();
+  if (!closest) return;
+
+  videos.forEach(v => {
+    if (v !== closest) v.pause();
+  });
+
+  if (userStarted) {
+    closest.muted = false;
+    closest.play().catch(err => {
+      console.warn('Não foi possível reproduzir o vídeo automaticamente:', err);
+    });
+  }
+}
+
+// ---------- Scroll ----------
+let scrollTimer;
+feed.addEventListener('scroll', () => {
+  if (!userStarted) return;
+  clearTimeout(scrollTimer);
+  scrollTimer = setTimeout(playCentralVideo, 80);
+});
+
+window.addEventListener('resize', () => {
+  if (userStarted) playCentralVideo();
+});
+
+// ---------- BOTÃO START ----------
+const bigPlay = document.getElementById('big-play');
+const startBtn = document.getElementById('start-btn');
+
+startBtn.addEventListener('click', () => {
+  userStarted = true;
+  bigPlay.style.display = 'none';
+  bigPlay.setAttribute('aria-hidden', 'true');
+
+  const central = getCentralVideo();
+  if (central) {
+    central.muted = false;
+    central.play().catch(e => {
+      console.warn('Erro ao tentar tocar após Start:', e);
+    });
+  }
+
+  videos.forEach(v => {
+    if (v !== central) v.pause();
+  });
+});
+
+// ---------- Clique direto no vídeo ----------
+videos.forEach(v => {
+  v.addEventListener('play', () => {
+    if (!userStarted) v.pause();
+  });
+
+  v.addEventListener('click', () => {
+    if (!userStarted) {
+      userStarted = true;
+      bigPlay.style.display = 'none';
+      const central = getCentralVideo();
+      if (central) {
+        central.muted = false;
+        central.play().catch(() => { });
+      }
+      videos.forEach(oth => { if (oth !== central) oth.pause(); });
+    } else {
+      if (v.paused) v.play().catch(() => { });
+      else v.pause();
+    }
+  });
+});
+
+// ---------- BARRA DE PESQUISA ----------
+const searchInput = document.getElementById('searchInput');
+const noResults = document.getElementById('noResults');
+const backButton = document.getElementById('backButton');
+
+searchInput.addEventListener('input', () => {
+  const term = searchInput.value.toLowerCase();
+  let found = false;
+
+  videos.forEach(v => {
+    if (!v.paused) lastPlaying = v;
+    v.pause();
+  });
+  bigPlay.style.display = 'none';
+
+  document.querySelectorAll('.card').forEach(card => {
+    const desc = card.querySelector('.description').innerText.toLowerCase();
+    if (desc.includes(term) || term === '') {
+      card.style.display = '';
+      found = true;
+    } else {
+      card.style.display = 'none';
+    }
+  });
+
+  if (!found && term !== '') {
+    noResults.style.display = 'block';
+  } else {
+    noResults.style.display = 'none';
+  }
+
+  if (term === '') {
+    noResults.style.display = 'none';
+    document.querySelectorAll('.card').forEach(card => card.style.display = '');
+    bigPlay.style.display = 'flex';
+  }
+});
+
+backButton.addEventListener('click', () => {
+  searchInput.value = '';
+  noResults.style.display = 'none';
+  document.querySelectorAll('.card').forEach(card => card.style.display = '');
+  bigPlay.style.display = 'flex';
+
+  if (lastPlaying) {
+    lastPlaying.muted = false;
+    lastPlaying.play().catch(() => { });
+  }
+});
+</script>
+
+</body>
+</html>
