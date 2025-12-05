@@ -971,7 +971,100 @@ backButton.addEventListener('click', () => {
     lastPlaying.play().catch(() => { });
   }
 });
+  
+const videoList = [
+  "videos/v33.mp4",
+  "videos/v18.mp4",
+  "videos/v9.mp4",
+  "videos/v20.mp4",
+  "videos/v19.mp4",
+  "videos/v30.mp4",
+  "videos/v6.mp4",
+  "videos/v16.mp4",
+  "videos/v2.mp4",
+  "videos/v3.mp4",
+  "videos/v7.mp4",
+  "videos/v22.mp4",
+  "videos/v35.mp4",
+  "videos/v37.mp4",
+  "videos/v43.mp4",
+  "videos/v1.mp4",
+  "videos/v4.mp4",
+  "videos/v36.mp4",
+  "videos/v40.mp4",
+  "videos/v42.mp4",
+   "videos/v44.mp4",
+  "videos/v21.mp4",
+  "videos/v12.mp4",
+   "videos/v123.mp4",
+  "videos/v25.mp4"
+];
+
+let loadIndex = 0;
+
+// FUNÇÃO: cria um card igual os seus
+function criarNovoCard(src) {
+  const card = document.createElement('div');
+  card.classList.add('card');
+
+  card.innerHTML = `
+    <video src="${src}" playsinline></video>
+    <div class="overlay">
+        <div class="info">
+            <p class="description">Vídeo gerado automaticamente</p>
+            <a class="download" href="${src}" download>Baixar</a>
+        </div>
+        <div class="actions">
+            <button class="btn">❤️</button>
+        </div>
+    </div>
+  `;
+
+  return card;
+}
+
+// FUNÇÃO: carrega +5 vídeos quando chega no fim
+function carregarMaisVideos() {
+  for (let i = 0; i < 5; i++) {
+
+    const src = videoList[loadIndex];
+    const novoCard = criarNovoCard(src);
+    feed.appendChild(novoCard);
+
+    loadIndex++;
+    if (loadIndex >= videoList.length) loadIndex = 0; // 🔥 reinicia quando acabar
+  }
+
+  // REATIVAR: autoplay, likes e eventos
+  recarregarSistema();
+}
+
+// OBS: aqui eu reuso suas funções de vídeo para incluir os novos
+function recarregarSistema() {
+
+  // Atualizar lista de vídeos
+  videos.length = 0;
+  document.querySelectorAll('video').forEach(v => videos.push(v));
+
+  // Reaplicar o clique, autoplay, pausas etc
+  videos.forEach(v => {
+    v.addEventListener('click', () => {
+      if (!userStarted) return;
+      if (v.paused) v.play();
+      else v.pause();
+    });
+  });
+
+  playCentralVideo();
+}
+
+// DETECTAR SCROLL NO FINAL
+feed.addEventListener("scroll", () => {
+  const nearBottom = feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 100;
+  if (nearBottom) carregarMaisVideos();
+});
 </script>
 
 </body>
 </html>
+
