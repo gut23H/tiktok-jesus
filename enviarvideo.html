@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Enviar vídeo</title>
+<style>
+  body{
+    margin:0;
+    font-family:Arial, Helvetica, sans-serif;
+    background:#000;
+    color:#fff;
+    height:100vh;
+    display:flex;
+    flex-direction:column;
+  }
+
+  /* conteúdo do site */
+  .content{
+    flex:1;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    text-align:center;
+    padding:20px;
+  }
+
+  /* botão fixo estilo TikTok */
+  .bottom-bar{
+    position:fixed;
+    bottom:0;
+    left:0;
+    width:100%;
+    background:linear-gradient(45deg, #69C9D0, #EE1D52);
+    padding:12px 0;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    z-index:1000;
+  }
+
+  .bottom-bar a{
+    color:#fff;
+    text-decoration:none;
+    font-weight:bold;
+    font-size:18px;
+    width:90%;
+    text-align:center;
+    padding:12px 0;
+    border-radius:25px;
+    background:rgba(0,0,0,0.3);
+    transition: all 0.2s;
+  }
+
+  .bottom-bar a:hover{
+    background:rgba(0,0,0,0.5);
+  }
+
+  /* instruções pequenas */
+  .instructions{
+    margin-top:15px;
+    font-size:14px;
+    color:#ccc;
+  }
+</style>
+</head>
+<body>
+
+<div class="content">
+  <div>
+    <h2>🎬 Quer ver seu vídeo no nosso site?</h2>
+    <p>Envie seu vídeo pelo WhatsApp e tenha a chance de aparecer no nosso feed!</p>
+    <div class="instructions">
+      Recomendado: MP4 ou MOV, até 100MB
+
+      ATENCÃO: VIDEO 25 MB - APENAS
+    </div>
+  </div>
+</div>
+
+<!-- Barra inferior fixa -->
+<div class="bottom-bar">
+  <a href="https://wa.me/5588988916133?text=%F0%9F%8E%AC%20Quer%20ver%20seu%20v%C3%ADdeo%20no%20nosso%20site%3F%0AEnvie%20seu%20v%C3%ADdeo%20pelo%20WhatsApp%20e%20tenha%20a%20chance%20de%20aparecer%20no%20nosso%20feed!%0A%0A%F0%9F%93%8C%20Regras%20r%C3%A1pidas%3A%0A%0AFormato%3A%20MP4%20ou%20MOV%0A%0ATamanho%3A%20at%C3%A9%20100MB%0A%0AVoc%C3%AA%20deve%20ser%20o%20autor%20do%20v%C3%ADdeo%20e%20autorizar%20a%20publica%C3%A7%C3%A3o" target="_blank">
+    Enviar vídeo pelo WhatsApp
+  </a>
+</div>
+
+</body>
+</html>
