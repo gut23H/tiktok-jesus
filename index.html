@@ -275,6 +275,40 @@ video {
     width: 20px;
 }
 
+.destaque {
+    color: #fff;                  /* Cor do texto */
+    background: #ff0050;          /* Fundo destacado */
+    padding: 8px 12px;            /* Espaçamento */
+    border-radius: 10px;          /* Cantos arredondados */
+    text-align: center;
+    font-weight: bold;
+    box-shadow: 0 4px 10px rgba(255,0,80,0.5); /* Sombra para destaque */
+    transition: all 0.3s ease;    /* Animação suave */
+}
+
+.destaque i {
+    font-size: 18px;              /* Tamanho do ícone */
+    margin-bottom: 3px;
+    display: block;
+}
+
+.destaque:hover {
+    background: #ff3380;          /* Muda o fundo ao passar o mouse */
+    box-shadow: 0 6px 12px rgba(255,51,128,0.6);
+    transform: translateY(-2px);  /* Pequeno efeito de elevação */
+}
+
+
+
+
+
+
+
+
+
+
+
+
 
 </style>
 
@@ -305,6 +339,7 @@ video {
 <div class="search-bar">
   <input type="text" id="searchInput" placeholder="Pesquisar... 🔍">
 </div>
+
 
 
 <!-- Mensagem de nenhum resultado -->
@@ -785,7 +820,7 @@ video {
     <i class="fa-solid fa-book-bible"></i>
     Bíblia
 </a>
- <a href="enviarvideo.html">
+<a href="enviarvideo.html" class="destaque">
     <i class="fa-solid fa-download"></i>
     Publicar Vídeo
 </a>
@@ -796,10 +831,26 @@ video {
   </a>
     <a href="aula.html">
     <i class="fa-solid fa-film"></i>
-    Quem e Jesus Cristo ?
+     Jesus Cristo ?
   </a>
 </div>
 <script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // ---------- EMBARALHAR ORDEM DOS VÍDEOS ----------
 const feed = document.querySelector('.feed');
@@ -971,7 +1022,25 @@ backButton.addEventListener('click', () => {
     lastPlaying.play().catch(() => { });
   }
 });
-  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 const videoList = [
   "videos/v33.mp4",
   "videos/v18.mp4",
