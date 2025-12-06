@@ -27,11 +27,27 @@
         padding: 20px;
     }
 
-    video {
+    .video-box {
+        position: relative;
+        width: 100%;
+        max-width: 600px;
+        cursor: pointer;
+        margin: 0 auto;
+    }
+
+    .capa {
         width: 100%;
         border-radius: 10px;
-        margin-top: 10px;
         box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .player {
+        display: none;
+        width: 100%;
+        height: 220px;
+        border-radius: 10px;
+        border: none;
+        margin-top: 10px;
     }
 
     h2 {
@@ -72,21 +88,40 @@
     }
 </style>
 
-<!-- Ícones -->
 <script src="https://kit.fontawesome.com/a2d9d5a64c.js" crossorigin="anonymous"></script>
 
 </head>
 <body>
 
 <header>Quem é Jesus Cristo?</header>
+<h2 style="
+    text-align:center;
+    background:#1b1b1b;
+    color:white;
+    padding:12px;
+    border-radius:8px;
+    font-size:20px;
+    margin-top:20px;
+    box-shadow:0 2px 5px rgba(0,0,0,0.3);
+">
+    📽️ Assista o vídeo abaixo
+</h2>
 
 <div class="container">
 
-    <!-- VIDEO MP4 -->
-   <video controls poster="qmejeus.jpg">
-    <source src="videos/quemejesus.mp4" type="video/mp4">
-    Seu navegador não suporta vídeos em MP4.
-</video>
+    <!-- VÍDEO COM CAPA + AUTOPLAY -->
+    <div class="video-box" onclick="playVideo()">
+        <!-- CAPA -->
+        <img src="qmejeus.jpg" class="capa" id="capa">
+        
+        <!-- PLAYER -->
+        <iframe 
+            id="video"
+            class="player"
+            src=""
+            allow="autoplay">
+        </iframe>
+    </div>
 
     <h2>Jesus: O Filho de Deus</h2>
     <p>
@@ -141,6 +176,18 @@
         <i class="fa-solid fa-music"></i><br>Músicas
     </a>
 </div>
+
+<script>
+function playVideo() {
+    document.getElementById("capa").style.display = "none";
+
+    const video = document.getElementById("video");
+    video.style.display = "block";
+
+    // COLOQUE O ID DO SEU VÍDEO AQUI
+    video.src = "https://drive.google.com/file/d/1QYFrkMDGoMbQZBX2ns3ITmHrvjkSXNj7/preview?autoplay=1";
+}
+</script>
 
 </body>
 </html>
