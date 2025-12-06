@@ -900,317 +900,235 @@ video {
   </a>
 </div>
 <script>
-
-  // Seleciona todos os botões de download
+  // ---------- DOWNLOAD DIRETO ----------
   const downloadBtns = document.querySelectorAll('.download');
 
   downloadBtns.forEach(btn => {
     btn.addEventListener('click', function(e) {
-      e.preventDefault(); // evita comportamento padrão
-      const fileUrl = btn.getAttribute('href'); // pega o link do vídeo
-      const a = document.createElement('a');    // cria um <a> temporário
+      e.preventDefault();
+      const fileUrl = btn.getAttribute('href');
+      const a = document.createElement('a');
       a.href = fileUrl;
-      a.download = fileUrl.split('/').pop();    // nome do arquivo
+      a.download = fileUrl.split('/').pop();
       document.body.appendChild(a);
-      a.click();                                // dispara o download
-      document.body.removeChild(a);             // remove o <a> temporário
+      a.click();
+      document.body.removeChild(a);
     });
   });
 
+  // ---------- EMBARALHAR ORDEM DOS VÍDEOS ----------
+  const feed = document.querySelector('.feed');
+  let videos = Array.from(document.querySelectorAll('video'));
+  const cards = Array.from(feed.children);
 
+  cards.sort(() => Math.random() - 0.5);
+  cards.forEach(card => feed.appendChild(card));
 
-
-
-
-
-
-
-
-
-
-
-
-
-// ---------- EMBARALHAR ORDEM DOS VÍDEOS ----------
-const feed = document.querySelector('.feed');
-const cards = Array.from(feed.children);
-
-// Embaralha aleatoriamente as cards
-cards.sort(() => Math.random() - 0.5);
-
-// Reanexa as cards embaralhadas ao feed
-cards.forEach(card => feed.appendChild(card));
-
-// ---------- Likes (mantive igual) ----------
-const buttons = document.querySelectorAll('.btn');
-buttons.forEach((btn, i) => {
-  const key = `like_${i}`;
-  if (localStorage.getItem(key) === 'true') btn.classList.add('liked');
-  btn.addEventListener('click', () => {
-    btn.classList.toggle('liked');
-    localStorage.setItem(key, btn.classList.contains('liked'));
-  });
-});
-
-// ---------- Configurações dos vídeos ----------
-const videos = Array.from(document.querySelectorAll('video'));
-let userStarted = false;
-let lastPlaying = null;
-
-videos.forEach(v => {
-  try { v.pause(); } catch (e) { }
-});
-
-// Função que encontra o vídeo central
-function getCentralVideo() {
-  const center = window.innerHeight / 2;
-  let closest = null;
-  let minDist = Infinity;
-  videos.forEach(v => {
-    const rect = v.getBoundingClientRect();
-    const videoCenter = rect.top + rect.height / 2;
-    const dist = Math.abs(center - videoCenter);
-    if (dist < minDist) {
-      minDist = dist;
-      closest = v;
-    }
-  });
-  return closest;
-}
-
-// Função que toca apenas o vídeo central
-function playCentralVideo() {
-  const closest = getCentralVideo();
-  if (!closest) return;
-
-  videos.forEach(v => {
-    if (v !== closest) v.pause();
-  });
-
-  if (userStarted) {
-    closest.muted = false;
-    closest.play().catch(err => {
-      console.warn('Não foi possível reproduzir o vídeo automaticamente:', err);
+  // ---------- Likes ----------
+  const buttons = document.querySelectorAll('.btn');
+  buttons.forEach((btn, i) => {
+    const key = `like_${i}`;
+    if (localStorage.getItem(key) === 'true') btn.classList.add('liked');
+    btn.addEventListener('click', () => {
+      btn.classList.toggle('liked');
+      localStorage.setItem(key, btn.classList.contains('liked'));
     });
-  }
-}
-
-// ---------- Scroll ----------
-let scrollTimer;
-feed.addEventListener('scroll', () => {
-  if (!userStarted) return;
-  clearTimeout(scrollTimer);
-  scrollTimer = setTimeout(playCentralVideo, 80);
-});
-
-window.addEventListener('resize', () => {
-  if (userStarted) playCentralVideo();
-});
-
-// ---------- BOTÃO START ----------
-const bigPlay = document.getElementById('big-play');
-const startBtn = document.getElementById('start-btn');
-
-startBtn.addEventListener('click', () => {
-  userStarted = true;
-  bigPlay.style.display = 'none';
-  bigPlay.setAttribute('aria-hidden', 'true');
-
-  const central = getCentralVideo();
-  if (central) {
-    central.muted = false;
-    central.play().catch(e => {
-      console.warn('Erro ao tentar tocar após Start:', e);
-    });
-  }
-
-  videos.forEach(v => {
-    if (v !== central) v.pause();
-  });
-});
-
-// ---------- Clique direto no vídeo ----------
-videos.forEach(v => {
-  v.addEventListener('play', () => {
-    if (!userStarted) v.pause();
   });
 
-  v.addEventListener('click', () => {
-    if (!userStarted) {
-      userStarted = true;
-      bigPlay.style.display = 'none';
-      const central = getCentralVideo();
-      if (central) {
-        central.muted = false;
-        central.play().catch(() => { });
+  // ---------- Configurações dos vídeos ----------
+  let userStarted = false;
+  let lastPlaying = null;
+
+  // ---------- Função para vídeo central ----------
+  function getCentralVideo() {
+    const center = window.innerHeight / 2;
+    let closest = null;
+    let minDist = Infinity;
+    videos.forEach(v => {
+      const rect = v.getBoundingClientRect();
+      const videoCenter = rect.top + rect.height / 2;
+      const dist = Math.abs(center - videoCenter);
+      if (dist < minDist) {
+        minDist = dist;
+        closest = v;
       }
-      videos.forEach(oth => { if (oth !== central) oth.pause(); });
-    } else {
-      if (v.paused) v.play().catch(() => { });
-      else v.pause();
+    });
+    return closest;
+  }
+
+  function playCentralVideo() {
+    const closest = getCentralVideo();
+    if (!closest) return;
+
+    videos.forEach(v => {
+      if (v !== closest) v.pause();
+    });
+
+    if (userStarted) {
+      closest.muted = false;
+      closest.play().catch(err => console.warn('Erro ao tocar vídeo central:', err));
     }
+  }
+
+  // ---------- Scroll ----------
+  let scrollTimer;
+  feed.addEventListener('scroll', () => {
+    if (!userStarted) return;
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(playCentralVideo, 80);
   });
-});
 
-// ---------- BARRA DE PESQUISA ----------
-const searchInput = document.getElementById('searchInput');
-const noResults = document.getElementById('noResults');
-const backButton = document.getElementById('backButton');
-
-searchInput.addEventListener('input', () => {
-  const term = searchInput.value.toLowerCase();
-  let found = false;
-
-  videos.forEach(v => {
-    if (!v.paused) lastPlaying = v;
-    v.pause();
+  window.addEventListener('resize', () => {
+    if (userStarted) playCentralVideo();
   });
-  bigPlay.style.display = 'none';
 
-  document.querySelectorAll('.card').forEach(card => {
-    const desc = card.querySelector('.description').innerText.toLowerCase();
-    if (desc.includes(term) || term === '') {
-      card.style.display = '';
-      found = true;
-    } else {
-      card.style.display = 'none';
+  // ---------- BOTÃO START ----------
+  const bigPlay = document.getElementById('big-play');
+  const startBtn = document.getElementById('start-btn');
+
+  startBtn.addEventListener('click', () => {
+    userStarted = true;
+    bigPlay.style.display = 'none';
+    bigPlay.setAttribute('aria-hidden', 'true');
+
+    const central = getCentralVideo();
+    if (central) {
+      central.muted = false;
+      central.play().catch(e => console.warn('Erro ao tocar vídeo central:', e));
     }
+
+    // Tocar os outros vídeos em mudo
+    videos.forEach(v => {
+      if (v !== central) {
+        v.muted = true;
+        v.play().catch(() => {});
+      }
+    });
   });
 
-  if (!found && term !== '') {
-    noResults.style.display = 'block';
-  } else {
-    noResults.style.display = 'none';
-  }
-
-  if (term === '') {
-    noResults.style.display = 'none';
-    document.querySelectorAll('.card').forEach(card => card.style.display = '');
-    bigPlay.style.display = 'flex';
-  }
-});
-
-backButton.addEventListener('click', () => {
-  searchInput.value = '';
-  noResults.style.display = 'none';
-  document.querySelectorAll('.card').forEach(card => card.style.display = '');
-  bigPlay.style.display = 'flex';
-
-  if (lastPlaying) {
-    lastPlaying.muted = false;
-    lastPlaying.play().catch(() => { });
-  }
-});
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-const videoList = [
-  "videos/v33.mp4",
-  "videos/v18.mp4",
-  "videos/v9.mp4",
-  "videos/v20.mp4",
-  "videos/v19.mp4",
-  "videos/v30.mp4",
-  "videos/v6.mp4",
-  "videos/v16.mp4",
-  "videos/v2.mp4",
-  "videos/v3.mp4",
-  "videos/v7.mp4",
-  "videos/v22.mp4",
-  "videos/v35.mp4",
-  "videos/v37.mp4",
-  "videos/v43.mp4",
-  "videos/v1.mp4",
-  "videos/v4.mp4",
-  "videos/v36.mp4",
-  "videos/v40.mp4",
-  "videos/v42.mp4",
-   "videos/v44.mp4",
-  "videos/v21.mp4",
-  "videos/v12.mp4",
-   "videos/v123.mp4",
-  "videos/v25.mp4"
-];
-
-let loadIndex = 0;
-
-// FUNÇÃO: cria um card igual os seus
-function criarNovoCard(src) {
-  const card = document.createElement('div');
-  card.classList.add('card');
-
-  card.innerHTML = `
-    <video src="${src}" playsinline></video>
-    <div class="overlay">
-        <div class="info">
-            <p class="description">❤️ Rei de Israel, video automatico</p>
-            <a class="download" href="${src}" download>Baixar</a>
-        </div>
-        <div class="actions">
-            <button class="btn">❤️</button>
-        </div>
-    </div>
-  `;
-
-  return card;
-}
-
-// FUNÇÃO: carrega +5 vídeos quando chega no fim
-function carregarMaisVideos() {
-  for (let i = 0; i < 5; i++) {
-
-    const src = videoList[loadIndex];
-    const novoCard = criarNovoCard(src);
-    feed.appendChild(novoCard);
-
-    loadIndex++;
-    if (loadIndex >= videoList.length) loadIndex = 0; // 🔥 reinicia quando acabar
-  }
-
-  // REATIVAR: autoplay, likes e eventos
-  recarregarSistema();
-}
-
-// OBS: aqui eu reuso suas funções de vídeo para incluir os novos
-function recarregarSistema() {
-
-  // Atualizar lista de vídeos
-  videos.length = 0;
-  document.querySelectorAll('video').forEach(v => videos.push(v));
-
-  // Reaplicar o clique, autoplay, pausas etc
+  // ---------- Clique no vídeo ----------
   videos.forEach(v => {
     v.addEventListener('click', () => {
       if (!userStarted) return;
-      if (v.paused) v.play();
+      if (v.paused) v.play().catch(() => {});
       else v.pause();
     });
   });
 
-  playCentralVideo();
-}
+  // ---------- Barra de pesquisa ----------
+  const searchInput = document.getElementById('searchInput');
+  const noResults = document.getElementById('noResults');
+  const backButton = document.getElementById('backButton');
 
-// DETECTAR SCROLL NO FINAL
-feed.addEventListener("scroll", () => {
-  const nearBottom = feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 100;
-  if (nearBottom) carregarMaisVideos();
-});
+  searchInput.addEventListener('input', () => {
+    const term = searchInput.value.toLowerCase();
+    let found = false;
+
+    videos.forEach(v => {
+      if (!v.paused) lastPlaying = v;
+      v.pause();
+    });
+    bigPlay.style.display = 'none';
+
+    document.querySelectorAll('.card').forEach(card => {
+      const desc = card.querySelector('.description').innerText.toLowerCase();
+      if (desc.includes(term) || term === '') {
+        card.style.display = '';
+        found = true;
+      } else {
+        card.style.display = 'none';
+      }
+    });
+
+    if (!found && term !== '') noResults.style.display = 'block';
+    else noResults.style.display = 'none';
+
+    if (term === '') {
+      noResults.style.display = 'none';
+      document.querySelectorAll('.card').forEach(card => card.style.display = '');
+      bigPlay.style.display = 'flex';
+    }
+  });
+
+  backButton.addEventListener('click', () => {
+    searchInput.value = '';
+    noResults.style.display = 'none';
+    document.querySelectorAll('.card').forEach(card => card.style.display = '');
+    bigPlay.style.display = 'flex';
+
+    if (lastPlaying) {
+      lastPlaying.muted = false;
+      lastPlaying.play().catch(() => {});
+    }
+  });
+
+  // ---------- Lista de vídeos ----------
+  const videoList = [
+    "videos/v33.mp4","videos/v18.mp4","videos/v9.mp4","videos/v20.mp4",
+    "videos/v19.mp4","videos/v30.mp4","videos/v6.mp4","videos/v16.mp4",
+    "videos/v2.mp4","videos/v3.mp4","videos/v7.mp4","videos/v22.mp4",
+    "videos/v35.mp4","videos/v37.mp4","videos/v43.mp4","videos/v1.mp4",
+    "videos/v4.mp4","videos/v36.mp4","videos/v40.mp4","videos/v42.mp4",
+    "videos/v44.mp4","videos/v21.mp4","videos/v12.mp4","videos/v123.mp4",
+    "videos/v25.mp4"
+  ];
+  let loadIndex = 0;
+
+  // ---------- Função criar card ----------
+  function criarNovoCard(src) {
+    const card = document.createElement('div');
+    card.classList.add('card');
+
+    card.innerHTML = `
+      <video src="${src}" playsinline muted loop></video>
+      <div class="overlay">
+        <div class="info">
+          <p class="description">❤️ Rei de Israel, vídeo automático</p>
+          <a class="download" href="${src}" download>Baixar</a>
+        </div>
+        <div class="actions">
+          <button class="btn">❤️</button>
+        </div>
+      </div>
+    `;
+    return card;
+  }
+
+  // ---------- Carregar +5 vídeos ----------
+  function carregarMaisVideos() {
+    for (let i = 0; i < 5; i++) {
+      const src = videoList[loadIndex];
+      const novoCard = criarNovoCard(src);
+      feed.appendChild(novoCard);
+
+      loadIndex++;
+      if (loadIndex >= videoList.length) loadIndex = 0;
+    }
+
+    recarregarSistema();
+  }
+
+  // ---------- Reaplicar eventos nos vídeos novos ----------
+  function recarregarSistema() {
+    videos = Array.from(document.querySelectorAll('video'));
+
+    // Clique no vídeo
+    videos.forEach(v => {
+      v.addEventListener('click', () => {
+        if (!userStarted) return;
+        if (v.paused) v.play().catch(() => {});
+        else v.pause();
+      });
+    });
+
+    playCentralVideo();
+  }
+
+  // ---------- Scroll detecta fim ----------
+  feed.addEventListener("scroll", () => {
+    const nearBottom = feed.scrollTop + feed.clientHeight >= feed.scrollHeight - 100;
+    if (nearBottom) carregarMaisVideos();
+  });
 </script>
 
 </body>
