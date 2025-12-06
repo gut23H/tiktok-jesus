@@ -3,180 +3,235 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title> Loja de Bíblias - Fisica e Digital</title>
+<title>Loja de Bíblias - Completa</title>
+
 <style>
-  * { margin:0; padding:0; box-sizing:border-box; }
-  body {
-    font-family: 'Arial', sans-serif;
-    background: #111;
-    color: #fff;
-  }
+/* ===========================
+   ESTILO GERAL
+=========================== */
+* { margin:0; padding:0; box-sizing:border-box; }
+body {
+  font-family: Arial, sans-serif;
+  background:#111;
+  color:#fff;
+}
 
-  header {
-    background: linear-gradient(90deg, #ff0050, #00f2ff);
-    padding: 25px;
-    text-align: center;
-    box-shadow: 0 5px 10px rgba(0,0,0,0.5);
-  }
-  header h1 {
-    font-size: 2.5em;
-    color: #fff;
-    text-shadow: 1px 1px 5px #000;
-  }
+/* ===========================
+   CABEÇALHO
+=========================== */
+header {
+  background: linear-gradient(90deg, #ff0050, #00f2ff);
+  padding: 25px;
+  text-align: center;
+  box-shadow: 0 5px 10px rgba(0,0,0,0.5);
+}
+header h1 {
+  font-size: 2.3em;
+  color: #fff;
+  text-shadow: 1px 1px 5px #000;
+  letter-spacing: 1px;
+}
 
-  .container {
-    max-width: 1100px;
-    margin: 20px auto;
-    padding: 10px;
-  }
+/* ===========================
+   CONTAINER PADRÃO
+=========================== */
+.container {
+  max-width: 1100px;
+  margin: 30px auto;
+  padding: 0 10px;
+}
 
-  .products-grid {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 20px;
-  }
-  .product {
-    background: #1c1c1c;
-    border-radius: 12px;
-    width: 220px;
-    text-align: center;
-    padding: 15px;
-    transition: .3s;
-  }
-  .product:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 10px 20px rgba(255,0,80,0.5), 0 10px 20px rgba(0,242,255,0.5);
-  }
-  .product img {
-    width: 100%;
-    border-radius: 10px;
-  }
-  .product h3 { margin: 10px 0 5px; font-size: 1.1em; }
-  .product p { margin: 5px 0; font-size: 0.95em; }
+/* ===========================
+   PRODUTOS
+=========================== */
+.products-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 25px;
+}
 
-  .product button {
-    background: #ff0050;
-    color: #fff;
-    border: none;
-    padding: 10px;
-    width: 100%;
-    border-radius: 8px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: .3s;
-  }
-  .product button:hover {
-    background: #00f2ff;
-    color: #111;
-  }
-  .product button:disabled {
-    background: #555;
-    cursor: not-allowed;
-  }
+.product {
+  background:#1c1c1c;
+  border-radius:12px;
+  width:250px;
+  text-align:center;
+  padding:18px;
+  transition:.3s;
+  box-shadow:0 0 10px rgba(0,0,0,0.4);
+}
+.product:hover {
+  transform: translateY(-6px);
+  box-shadow:0 0 15px rgba(255,0,80,0.5);
+}
+.product img {
+  width:100%;
+  border-radius:10px;
+}
+.product h3 { margin:12px 0 5px; }
+.product p { margin:5px 0; opacity:0.9; }
 
-  /* Carrinho */
-  #cart {
-    background: #1c1c1c;
-    border-radius: 12px;
-    padding: 15px;
-    margin-top: 30px;
-  }
-  #cart h2 { color: #ff0050; margin-bottom: 10px; }
-  #cart ul { list-style: none; padding-left: 0; }
+.product button {
+  margin-top:10px;
+  background:#ff0050;
+  color:#fff;
+  border:none;
+  padding:12px;
+  width:100%;
+  border-radius:10px;
+  cursor:pointer;
+  font-weight:bold;
+  transition:.3s;
+}
+.product button:hover { background:#00f2ff; color:#111; }
+.product button:disabled { background:#555; }
 
-  /* Formulário */
-  #checkoutForm {
-    background: #1c1c1c;
-    border-radius: 12px;
-    padding: 20px;
-    margin-top: 30px;
-  }
+/* ===========================
+   DOWNLOAD BÍBLIA
+=========================== */
+#downloadBibleBox {
+  background:#1c1c1c;
+  padding:25px;
+  border-radius:15px;
+  text-align:center;
+  margin-top:20px;
+  box-shadow:0 0 12px rgba(255,0,80,0.4);
+}
+#downloadBibleBox a {
+  background:linear-gradient(90deg, #ff0050, #00f2ff);
+  padding:15px 25px;
+  color:#fff;
+  border-radius:10px;
+  font-weight:bold;
+  font-size:1.1em;
+  display:inline-block;
+  margin-top:10px;
+  text-decoration:none;
+  transition:.3s;
+}
+#downloadBibleBox a:hover { opacity:0.8; }
 
-  #checkoutForm h2 { color: #00f2ff; margin-bottom: 15px; }
+/* ===========================
+   CARRINHO
+=========================== */
+#cart {
+  background:#1c1c1c;
+  padding:20px;
+  border-radius:15px;
+  margin-top:30px;
+}
+#cart h2 { color:#ff0050; margin-bottom:10px; }
+#cart ul { list-style:none; }
 
-  #checkoutForm input {
-    width: 100%; padding: 10px;
-    margin: 8px 0 15px;
-    border-radius: 8px; border: none;
-    font-size: 1em;
-  }
+/* ===========================
+   FORMULÁRIO
+=========================== */
+#checkoutForm {
+  background:#1c1c1c;
+  padding:25px;
+  border-radius:15px;
+  margin-top:30px;
+}
+#checkoutForm h2 { color:#00f2ff; margin-bottom:15px; }
 
-  #sendOrder {
-    background: #ff0050;
-    color: #fff;
-    padding: 12px;
-    width: 100%;
-    border: none;
-    border-radius: 10px;
-    font-size: 1.1em;
-    cursor: pointer;
-    font-weight: bold;
-    transition: .3s;
-  }
-  #sendOrder:hover {
-    background: #00f2ff;
-    color: #111;
-  }
+#checkoutForm input {
+  width:100%;
+  padding:12px;
+  border-radius:10px;
+  border:none;
+  margin-bottom:15px;
+  font-size:1em;
+}
 
-  /* Download Grátis */
-  #downloadBibleBox {
-    background:#1c1c1c;
-    padding:20px;
-    border-radius:15px;
-    text-align:center;
-    box-shadow:0 0 15px rgba(255,0,80,0.4);
-  }
+#sendOrder {
+  background:#ff0050;
+  padding:13px;
+  border:none;
+  width:100%;
+  border-radius:12px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.3s;
+}
+#sendOrder:hover { background:#00f2ff; color:#111; }
 
-  @media(max-width:600px){
-    .products-grid { flex-direction: column; align-items: center; }
-  }
+/* ===========================
+   MENU BOTTOM
+=========================== */
+.bottom-bar {
+  position:fixed;
+  bottom:0;
+  left:0;
+  width:100%;
+  background:#111;
+  border-top:2px solid #00f2ea;
+  display:flex;
+  justify-content:space-around;
+  padding:10px 0;
+  z-index:999;
+}
+
+.bottom-bar a {
+  color:white;
+  text-align:center;
+  font-size:13px;
+  text-decoration:none;
+}
+
+.bottom-bar i {
+  font-size:22px;
+  margin-bottom:4px;
+}
+
+.bottom-bar a:hover { color:#00f2ea; }
+
+/* Responsivo */
+@media(max-width:600px) {
+  .products-grid { flex-direction:column; }
+}
 </style>
 </head>
+
 <body>
 
 <header>
-  <h1>Loja de Bíblias</h1>
+  <h1>Loja de Bíblias — Física & Digital</h1>
 </header>
 
-<!-- PRODUTOS -->
+<!-- ===========================
+     PRODUTOS
+=========================== -->
 <div class="container">
+  <h2 style="text-align:center; margin-bottom:20px;">📚 Bíblias Disponíveis Fisicas</h2>
   <div class="products-grid" id="productsContainer"></div>
 </div>
 
-<!-- DOWNLOAD GRÁTIS -->
+<!-- ===========================
+     DOWNLOAD
+=========================== -->
 <div class="container">
-  <h2 style="color:#ff0050; text-align:center; text-shadow:0 0 10px #ff0050;">📥 Baixar Bíblia em PDF (GRÁTIS)</h2>
+  <h2 style="text-align:center; color:#ff0050; text-shadow:0 0 10px #ff0050;">
+    📥 Baixar Bíblia em PDF (GRÁTIS)
+  </h2>
 
   <div id="downloadBibleBox">
-    <p style="font-size:1.2em; margin-bottom:15px;">
-      Clique abaixo para baixar a Bíblia completa em PDF gratuitamente.
-    </p>
-
-    <a href="biblia.pdf" download style="
-      background:linear-gradient(90deg, #ff0050, #00f2ff);
-      padding:15px 25px;
-      color:#fff;
-      font-size:1.1em;
-      font-weight:bold;
-      border-radius:10px;
-      text-decoration:none;
-      display:inline-block;
-      box-shadow:0 0 10px rgba(255,0,80,0.7);
-    ">
-      📘 Baixar Bíblia em PDF
-    </a>
+    <p style="font-size:1.2em;">Clique abaixo para baixar a Bíblia completa em PDF gratuitamente.</p>
+    <a href="biblia.pdf" download>📘 Baixar Bíblia em PDF</a>
   </div>
 </div>
 
-<!-- CARRINHO -->
+<!-- ===========================
+     CARRINHO
+=========================== -->
 <div class="container" id="cart">
   <h2>Carrinho</h2>
   <ul id="cartItems"></ul>
   <p id="totalPrice">Total: R$0,00</p>
 </div>
 
-<!-- FORMULÁRIO -->
+<!-- ===========================
+     FORMULÁRIO
+=========================== -->
 <div class="container" id="checkoutForm">
   <h2>Dados do Comprador</h2>
   <input type="text" id="buyerName" placeholder="Nome completo">
@@ -186,85 +241,98 @@
   <button id="sendOrder">Enviar Pedido via WhatsApp</button>
 </div>
 
+<!-- ICONES -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<!-- ===========================
+     MENU INFERIOR
+=========================== -->
+<div class="bottom-bar">
+  <a href="index.html"> <i class="fa-solid fa-house"></i>Inicio</a>
+ 
+  
+ 
+</div>
+
 <script>
-  const products = [
-    { id: 1, name: "Bíblia Sagrada - NVI", price: 60, stock: 1, image: "biblia01.png" },
-    { id: 2, name: "Bíblia 365 Leituras", price: 90, stock: 1, image: "biblia02.webp" }
-  ];
+/* PRODUTOS */
+const products = [
+  { id:1, name:"Bíblia Sagrada - NVI", price:60, stock:1, image:"biblia01.png" },
+  { id:2, name:"Bíblia 365 Leituras", price:90, stock:1, image:"biblia02.webp" }
+];
+let cart = [];
 
-  let cart = [];
+function displayProducts(){
+  const container = document.getElementById('productsContainer');
+  container.innerHTML = "";
+  products.forEach(product=>{
+    const div = document.createElement("div");
+    div.className = "product";
+    div.innerHTML = `
+      <img src="${product.image}">
+      <h3>${product.name}</h3>
+      <p>Preço: R$${product.price}</p>
+      <p>Estoque: ${product.stock}</p>
+      <button ${product.stock===0?"disabled":""} onclick="addToCart(${product.id})">Adicionar</button>
+    `;
+    container.appendChild(div);
+  });
+}
 
-  function displayProducts() {
-    const container = document.getElementById('productsContainer');
-    container.innerHTML = "";
-    products.forEach(product => {
-      const div = document.createElement('div');
-      div.className = "product";
-      div.innerHTML = `
-        <img src="${product.image}">
-        <h3>${product.name}</h3>
-        <p>Preço: R$${product.price}</p>
-        <p>Estoque: ${product.stock}</p>
-        <button ${product.stock === 0 ? "disabled" : ""} onclick="addToCart(${product.id})">Adicionar</button>
-      `;
-      container.appendChild(div);
-    });
+function addToCart(id){
+  const product = products.find(p=>p.id === id);
+  if(product.stock > 0){
+    product.stock--;
+    const item = cart.find(i=>i.id === id);
+    if(item) item.quantity++;
+    else cart.push({...product, quantity:1});
+    updateCart();
+    displayProducts();
   }
+}
 
-  function addToCart(id){
-    const product = products.find(p => p.id === id);
-    if(product.stock > 0){
-      product.stock--;
-      const item = cart.find(i => i.id === id);
-      if(item) item.quantity++;
-      else cart.push({...product, quantity:1});
-      updateCart();
-      displayProducts();
-    }
-  }
+function updateCart(){
+  const list = document.getElementById('cartItems');
+  list.innerHTML = "";
+  let total = 0;
 
-  function updateCart(){
-    const list = document.getElementById('cartItems');
-    list.innerHTML = "";
-    let total = 0;
-
-    cart.forEach(item=>{
-      list.innerHTML += `<li>${item.name} x${item.quantity} - R$${item.price * item.quantity}</li>`;
-      total += item.price * item.quantity;
-    });
-
-    document.getElementById('totalPrice').innerText = "Total: R$" + total;
-  }
-
-  document.getElementById('sendOrder').addEventListener('click', ()=>{
-    if(cart.length === 0){ alert("Carrinho vazio!"); return; }
-
-    const name = buyerName.value.trim();
-    const address = buyerAddress.value.trim();
-    const phone = buyerPhone.value.trim();
-    const email = buyerEmail.value.trim();
-
-    if(!name || !address || !phone || !email){
-      alert("Preencha todos os campos!");
-      return;
-    }
-
-    let msg = `PEDIDO DE BÍBLIAS:%0A%0A`;
-    cart.forEach(item=>{
-      msg += `${item.name} x${item.quantity} = R$${item.price * item.quantity}%0A`;
-    });
-
-    const total = cart.reduce((s,i)=>s+i.price*i.quantity,0);
-    msg += `%0ATotal: R$${total}%0A%0A`;
-    msg += `Dados:%0A${name}%0A${address}%0A${phone}%0A${email}`;
-
-    window.open(`https://wa.me/5588988916133?text=${msg}`);
+  cart.forEach(item=>{
+    list.innerHTML += `<li>${item.name} x${item.quantity} — R$${item.price * item.quantity}</li>`;
+    total += item.price * item.quantity;
   });
 
-  displayProducts();
+  document.getElementById('totalPrice').innerText = "Total: R$" + total;
+}
+
+/* ENVIAR PEDIDO */
+document.getElementById('sendOrder').addEventListener('click', ()=>{
+  if(cart.length === 0){ alert("Carrinho vazio!"); return; }
+
+  const name = buyerName.value.trim();
+  const address = buyerAddress.value.trim();
+  const phone = buyerPhone.value.trim();
+  const email = buyerEmail.value.trim();
+
+  if(!name || !address || !phone || !email){
+    alert("Preencha todos os campos!");
+    return;
+  }
+
+  let msg = `PEDIDO DE BÍBLIAS:%0A%0A`;
+  cart.forEach(item=>{
+    msg += `${item.name} x${item.quantity} = R$${item.price * item.quantity}%0A`;
+  });
+
+  const total = cart.reduce((s,i)=>s+i.price*i.quantity,0);
+  msg += `%0ATotal: R$${total}%0A%0A`;
+  msg += `Dados:%0A${name}%0A${address}%0A${phone}%0A${email}`;
+
+  window.open(`https://wa.me/558988916133?text=${msg}`);
+});
+
+displayProducts();
 </script>
 
 </body>
 </html>
-
 
