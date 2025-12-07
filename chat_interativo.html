@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chat Automático com PIX</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background: #f0f2f5;
+    margin:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:20px;
+  }
+
+  h1 {
+    color: #0ea5e9;
+    text-align:center;
+    margin-bottom:20px;
+  }
+
+  #chat-box {
+    width:100%;
+    max-width:420px;
+    height:450px;
+    background:#e5ddd5;
+    border-radius:12px;
+    padding:15px;
+    overflow-y:auto;
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-bottom:10px;
+  }
+
+  input, button {
+    width:100%;
+    padding:12px;
+    border-radius:20px;
+    border:1px solid #ccc;
+    margin-top:10px;
+    font-size:16px;
+  }
+
+  button {
+    background:#0ea5e9;
+    color:#fff;
+    border:none;
+    cursor:pointer;
+    font-weight:bold;
+  }
+
+  button:hover { background:#0284c7; }
+
+  .msg {
+    padding:10px 15px;
+    border-radius:20px;
+    max-width:75%;
+    word-wrap:break-word;
+    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+  }
+
+  .msg.usuario { background:#0ea5e9; color:#fff; align-self:flex-end; }
+  .msg.bot { background:#ffffff; color:#000; align-self:flex-start; }
+
+  .opcoes {
+    display:flex;
+    flex-direction:column;
+    gap:10px;
+    margin-top:5px;
+  }
+
+  .opcao-btn {
+    padding:10px;
+    border:none;
+    border-radius:12px;
+    background:#10b981;
+    color:#fff;
+    cursor:pointer;
+    font-weight:bold;
+  }
+
+  .opcao-btn:hover { background:#059669; }
+
+  .pix-btn {
+    margin-top:5px;
+    padding:8px 12px;
+    background:#10b981;
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+  }
+
+  .pix-btn:hover { background:#059669; }
+</style>
+</head>
+<body>
+
+<h1>Chat</h1>
+
+<div id="chat-box"></div>
+<input id="msg" placeholder="Digite sua mensagem...">
+<button onclick="enviarMensagem()">Enviar</button>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+import { getDatabase, ref, push, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+// Config Firebase
+const firebaseConfig = {
+  apiKey: "AIzaSyDcZxOE2lP45yk0IxEpRWX06UN4-NrSGes",
+  authDomain: "chat-anonimo-beab4.firebaseapp.com",
+  projectId: "chat-anonimo-beab4",
+  storageBucket: "chat-anonimo-beab4.firebasestorage.app",
+  messagingSenderId: "504851975660",
+  appId: "1:504851975660:web:39babfcd84f6472f6504c9",
+  measurementId: "G-ZXEREE5Y5G",
+  databaseURL: "https://chat-anonimo-beab4-default-rtdb.firebaseio.com/"
+};
+
+const app = initializeApp(firebaseConfig);
+const db = getDatabase(app);
+
+let userId = Date.now().toString();
+let sala = "chat_final_pix";
+let esperandoResposta = false;
+
+// Limpa mensagens anteriores e envia mensagem inicial
+async function iniciarChat() {
+  await remove(ref(db, "mensagens/" + sala)); // Remove todas as mensagens
+  enviarBot("Seja bem-vindo ao nosso site! 😄\nEscolha uma opção clicando abaixo:");
+  mostrarOpcoes();
+}
+
+// Enviar mensagem do usuário
+window.enviarMensagem = async function() {
+  const input = document.getElementById('msg');
+  const texto = input.value.trim();
+  if (!texto) return;
+
+  push(ref(db, "mensagens/" + sala), { texto, userId, tipo:"usuario", hora: Date.now() });
+  input.value = '';
+
+  if (esperandoResposta) {
+    setTimeout(() => {
+      enviarBot("Recebemos sua mensagem, entraremos em contato em breve! 😉");
+      esperandoResposta = false;
+    }, 500);
+  }
+}
+
+// Função que envia mensagem do bot
+function enviarBot(texto) {
+  push(ref(db, "mensagens/" + sala), { texto, userId: "bot", tipo:"bot", hora: Date.now() });
+}
+
+// Mostra botões de opções
+function mostrarOpcoes() {
+  const chatDiv = document.getElementById("chat-box");
+  const divOpcoes = document.createElement("div");
+  divOpcoes.className = "opcoes";
+
+  ["Publicação de vídeo","Dúvida","Reclamação","Ajudar a manter o site"].forEach((op, index) => {
+    const btn = document.createElement("button");
+    btn.textContent = op;
+    btn.className = "opcao-btn";
+    btn.onclick = () => escolherOpcao(index + 1);
+    divOpcoes.appendChild(btn);
+  });
+
+  chatDiv.appendChild(divOpcoes);
+  chatDiv.scrollTop = chatDiv.scrollHeight;
+}
+
+// Ação quando escolhe uma opção
+function escolherOpcao(op){
+  const chatDiv = document.getElementById("chat-box");
+  const opText = ["Publicação de vídeo","Dúvida","Reclamação","Ajudar a manter o site"][op-1];
+
+  // Enviar escolha do usuário
+  push(ref(db, "mensagens/" + sala), { texto: opText, userId, tipo:"usuario", hora: Date.now() });
+
+  let resposta = "";
+  if(op === 1){
+    resposta = "Você escolheu Publicação de vídeo. Para publicar, envie o vídeo em nosso WhatsApp.";
+  } else if(op === 2 || op === 3){
+    resposta = op===2 ? "Você escolheu Dúvida. Por favor, descreva sua dúvida." : "Você escolheu Reclamação. Por favor, descreva sua reclamação.";
+    esperandoResposta = true;
+  } else if(op === 4){
+    resposta = "Muito obrigado por querer ajudar! Aqui está o nosso PIX:\ngustavopaulo2283@gmail.com";
+    setTimeout(() => {
+      const btn = document.createElement('button');
+      btn.textContent = "Copiar PIX";
+      btn.className = "pix-btn";
+      btn.onclick = () => { navigator.clipboard.writeText("gustavopaulo2283@gmail.com"); alert("PIX copiado!"); };
+      chatDiv.appendChild(btn);
+      chatDiv.scrollTop = chatDiv.scrollHeight;
+    }, 200);
+  }
+
+  enviarBot(resposta);
+}
+
+// Carregar chat em tempo real
+function carregarChat() {
+  const chatDiv = document.getElementById("chat-box");
+  onValue(ref(db, "mensagens/" + sala), snapshot => {
+    chatDiv.innerHTML = '';
+    snapshot.forEach(child => {
+      const msg = child.val();
+      const div = document.createElement('div');
+      div.textContent = msg.texto;
+      div.className = "msg " + (msg.tipo === "usuario" ? "usuario" : "bot");
+      chatDiv.appendChild(div);
+    });
+    chatDiv.scrollTop = chatDiv.scrollHeight;
+  });
+}
+
+carregarChat();
+iniciarChat();
+</script>
+
+</body>
+</html>
