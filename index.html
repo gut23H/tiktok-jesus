@@ -373,6 +373,57 @@ video {
   animation: like-pop 0.5s ease;
 }
 
+
+
+
+
+
+  
+
+.actions {
+  pointer-events: auto;
+  display: flex;
+  flex-direction: column;  /* vertical */
+  gap: 4px;                 /* espaço pequeno entre os botões */
+  position: absolute;
+  bottom: 100px;            /* distância da base do vídeo */
+  right: 10px;              /* distância da lateral direita */
+  align-items: center;
+  z-index: 10;
+}
+
+.btn, .share-btn {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  border: none;
+  transition: all 0.3s ease;
+}
+
+.btn {
+  background: var(--accent);
+  color: white;
+}
+
+.btn:hover, .btn.liked {
+  background: var(--accent2);
+}
+
+.share-btn {
+  background: var(--accent2);
+  color: #000;
+}
+
+.share-btn:hover {
+  background: var(--accent);
+  color: white;
+  transform: scale(1.1);
+}
 </style>
 
 </head>
@@ -430,7 +481,10 @@ video {
     <div class="info">
       <div class="description">#Jesus #Fé</div>
     </div>
-    <div class="actions"><button class="btn">❤️</button></div>
+    <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v1.mp4">🔗</button>
+</div>
   </div>
 </div>
 
@@ -447,7 +501,10 @@ video {
         <div class="description"> #Cristão #Esperança</div>
         <a href="videos/v2.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+      <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v2.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -465,7 +522,10 @@ video {
         <div class="description">#jesuscristo #jesus #evangelho #versiculosbiblicos #deus</div>
         <a href="videos/v19.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v19.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -481,7 +541,10 @@ video {
         <div class="description">Palavra de fé #JesusVive</div>
         <a href="videos/v4.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+      <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v4.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -499,7 +562,10 @@ video {
         <div class="description">💌 #efesios #salmos #biblia</div>
         <a href="videos/v20.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+      <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v20.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -514,7 +580,10 @@ video {
         <div class="description">❤️ </div>
         <a href="videos/v6.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+      <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v6.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -530,7 +599,10 @@ video {
         <div class="description">Jesus veio para trazer luz ao mundo e oferecer vida eterna através da fé.</div>
         <a href="videos/v7.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v7.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -548,7 +620,10 @@ video {
 #cristao #edit #cristo #deus #edits✝️</div>
         <a href="videos/v9.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v9.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -565,7 +640,10 @@ video {
         <div class="description">O mundo já está perdido//Isaías 55: 6-9 procurem a ajuda de Deus enquanto podem achá-lo</div>
         <a href="videos/v12.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v12.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -583,7 +661,10 @@ video {
 #Deus #evangelho #jesus #salmos #cristao #versiculosbiblicos</div>
         <a href="videos/v16.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v16.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -601,7 +682,10 @@ video {
         <div class="description">#love #fy</div>
         <a href="videos/v18.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v8.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -617,7 +701,10 @@ video {
         <div class="description">Amor</div>
         <a href="videos/v3.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v3.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -633,7 +720,10 @@ video {
         <div class="description">Amém 🙌🏼✝️ #frasesreflexao #frasesreflexivas  #versiculosbiblicos-</div>
         <a href="videos/v21.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+      <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v21.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -649,7 +739,10 @@ video {
         <div class="description">#frasesreflexao #reflexaododia #reflexao🌼</div>
         <a href="videos/v22.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v22.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -667,7 +760,10 @@ video {
 #palavradeDeus palavradeDeus #bibliasagrada #versiculos #versiculosbiblicos  #versiculossagrados</div>
         <a href="videos/v23.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v23.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -683,7 +779,10 @@ video {
         <div class="description">autocontrole #Deus #Jesus staosnotiktok #cristianoronaldo #messi #futebol #fypシ </div>
         <a href="videos/v25.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v1.mp25">🔗</button>
+</div>
     </div>
   </div>
 
@@ -700,7 +799,10 @@ video {
 </div>
         <a href="videos/v30.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v30.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -718,7 +820,10 @@ video {
 </div>
         <a href="videos/v33.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v33.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -740,7 +845,10 @@ video {
 </div>
         <a href="videos/v35.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v35.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -760,7 +868,10 @@ video {
 </div>
         <a href="videos/v36.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v36.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -783,7 +894,10 @@ video {
 </div>
         <a href="videos/v37.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+      <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v37.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -805,7 +919,10 @@ video {
 </div>
         <a href="videos/v40.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v40.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -828,7 +945,10 @@ video {
 </div>
         <a href="videos/v42.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v42.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -848,7 +968,10 @@ video {
 </div>
         <a href="videos/v43.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+       <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v43.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -866,7 +989,10 @@ video {
 </div>
         <a href="videos/v44.mp4" class="download" download>⬇️ Baixar</a>
       </div>
-      <div class="actions"><button class="btn">❤️</button></div>
+      <div class="actions">
+  <button class="btn">❤️</button>
+  <button class="share-btn" data-video="v44.mp4">🔗</button>
+</div>
     </div>
   </div>
 
@@ -900,6 +1026,28 @@ video {
   </a>
 </div>
 <script>
+  // ---------- Compartilhar link do vídeo ----------
+document.querySelectorAll('.share-btn').forEach(button => {
+  button.addEventListener('click', () => {
+    const video = button.getAttribute('data-video');
+    const url = `${window.location.origin}${window.location.pathname}?video=${video}`;
+    navigator.clipboard.writeText(url).then(() => {
+      alert('Link copiado! 🔗');
+    });
+  });
+});
+
+// ---------- Mostrar apenas o vídeo do link ----------
+window.addEventListener('load', () => {
+  const params = new URLSearchParams(window.location.search);
+  const videoParam = params.get('video');
+
+  if(videoParam) {
+    document.querySelectorAll('.card').forEach(card => card.style.display = 'none');
+    const targetCard = document.querySelector(`.share-btn[data-video="${videoParam}"]`)?.closest('.card');
+    if(targetCard) targetCard.style.display = 'block';
+  }
+});
   // ---------- DOWNLOAD DIRETO ----------
   const downloadBtns = document.querySelectorAll('.download');
 
@@ -1133,6 +1281,7 @@ video {
 
 </body>
 </html>
+
 
 
 
