@@ -3,29 +3,31 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Chat Automático com PIX</title>
+<title>Chat Automático Estilo TikTok</title>
 <style>
   body {
     font-family: Arial, sans-serif;
-    background: #f0f2f5;
+    background: #010101; /* fundo preto estilo TikTok */
     margin:0;
     display:flex;
     flex-direction:column;
     align-items:center;
     padding:20px;
+    color: #fff;
   }
 
   h1 {
-    color: #0ea5e9;
+    color: #00f2ea; /* azul/turquesa TikTok */
     text-align:center;
     margin-bottom:20px;
+    text-shadow: 2px 2px 4px #ff0050; /* efeito de destaque rosa */
   }
 
   #chat-box {
     width:100%;
     max-width:420px;
     height:450px;
-    background:#e5ddd5;
+    background:#121212; /* caixa de chat escura */
     border-radius:12px;
     padding:15px;
     overflow-y:auto;
@@ -33,37 +35,57 @@
     flex-direction:column;
     gap:10px;
     margin-bottom:10px;
+    border: 2px solid #ff0050; /* borda rosa estilo TikTok */
   }
 
   input, button {
     width:100%;
     padding:12px;
     border-radius:20px;
-    border:1px solid #ccc;
+    border:none;
     margin-top:10px;
     font-size:16px;
   }
 
-  button {
-    background:#0ea5e9;
+  input {
+    background:#1f1f1f;
     color:#fff;
-    border:none;
-    cursor:pointer;
-    font-weight:bold;
+    border: 1px solid #333;
   }
 
-  button:hover { background:#0284c7; }
+  button {
+    background:#00f2ea;
+    color:#010101;
+    cursor:pointer;
+    font-weight:bold;
+    transition: all 0.2s;
+  }
+
+  button:hover { 
+    background:#ff0050; 
+    color:#fff;
+  }
 
   .msg {
     padding:10px 15px;
     border-radius:20px;
     max-width:75%;
     word-wrap:break-word;
-    box-shadow:0 2px 5px rgba(0,0,0,0.1);
+    box-shadow:0 2px 5px rgba(0,0,0,0.5);
+    font-weight:500;
   }
 
-  .msg.usuario { background:#0ea5e9; color:#fff; align-self:flex-end; }
-  .msg.bot { background:#ffffff; color:#000; align-self:flex-start; }
+  .msg.usuario { 
+    background:#00f2ea; 
+    color:#010101; 
+    align-self:flex-end; 
+  }
+
+  .msg.bot { 
+    background:#ff0050; 
+    color:#fff; 
+    align-self:flex-start; 
+  }
 
   .opcoes {
     display:flex;
@@ -73,33 +95,42 @@
   }
 
   .opcao-btn {
-    padding:10px;
+    padding:12px;
     border:none;
     border-radius:12px;
-    background:#10b981;
-    color:#fff;
+    background:#00f2ea;
+    color:#010101;
     cursor:pointer;
     font-weight:bold;
+    transition: all 0.2s;
   }
 
-  .opcao-btn:hover { background:#059669; }
+  .opcao-btn:hover { 
+    background:#ff0050;
+    color:#fff;
+  }
 
   .pix-btn {
     margin-top:5px;
     padding:8px 12px;
-    background:#10b981;
-    color:#fff;
+    background:#00f2ea;
+    color:#010101;
     border:none;
     border-radius:8px;
     cursor:pointer;
+    font-weight:bold;
+    transition: all 0.2s;
   }
 
-  .pix-btn:hover { background:#059669; }
+  .pix-btn:hover { 
+    background:#ff0050; 
+    color:#fff; 
+  }
 </style>
 </head>
 <body>
 
-<h1>Chat</h1>
+<h1>Chat Automático 🤖</h1>
 
 <div id="chat-box"></div>
 <input id="msg" placeholder="Digite sua mensagem...">
@@ -109,7 +140,6 @@
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
 import { getDatabase, ref, push, onValue, set, remove } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
 
-// Config Firebase
 const firebaseConfig = {
   apiKey: "AIzaSyDcZxOE2lP45yk0IxEpRWX06UN4-NrSGes",
   authDomain: "chat-anonimo-beab4.firebaseapp.com",
@@ -128,9 +158,9 @@ let userId = Date.now().toString();
 let sala = "chat_final_pix";
 let esperandoResposta = false;
 
-// Limpa mensagens anteriores e envia mensagem inicial
+// Limpa mensagens e inicia chat
 async function iniciarChat() {
-  await remove(ref(db, "mensagens/" + sala)); // Remove todas as mensagens
+  await remove(ref(db, "mensagens/" + sala));
   enviarBot("Seja bem-vindo ao nosso site! 😄\nEscolha uma opção clicando abaixo:");
   mostrarOpcoes();
 }
@@ -152,12 +182,12 @@ window.enviarMensagem = async function() {
   }
 }
 
-// Função que envia mensagem do bot
+// Função de resposta do bot
 function enviarBot(texto) {
   push(ref(db, "mensagens/" + sala), { texto, userId: "bot", tipo:"bot", hora: Date.now() });
 }
 
-// Mostra botões de opções
+// Mostrar botões de opções
 function mostrarOpcoes() {
   const chatDiv = document.getElementById("chat-box");
   const divOpcoes = document.createElement("div");
@@ -175,12 +205,11 @@ function mostrarOpcoes() {
   chatDiv.scrollTop = chatDiv.scrollHeight;
 }
 
-// Ação quando escolhe uma opção
+// Escolha do usuário
 function escolherOpcao(op){
   const chatDiv = document.getElementById("chat-box");
   const opText = ["Publicação de vídeo","Dúvida","Reclamação","Ajudar a manter o site"][op-1];
 
-  // Enviar escolha do usuário
   push(ref(db, "mensagens/" + sala), { texto: opText, userId, tipo:"usuario", hora: Date.now() });
 
   let resposta = "";
@@ -226,3 +255,5 @@ iniciarChat();
 
 </body>
 </html>
+
+
